@@ -4,7 +4,7 @@ const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
 const { use } = require("express/lib/application");
 require("dotenv").config();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +22,7 @@ async function run() {
     const appointmentsCollection = database.collection("appointments");
     const usersCollection = database.collection("users");
 
-    app.get("/getAppointments", async (req, res) => {
+    app.get("/appointments", async (req, res) => {
       const email = req.query.email;
       const date = new Date(req.query.date).toLocaleDateString();
       const query = { email: email, date: date };
@@ -55,13 +55,13 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
-    app.post("/addUsers", async (req, res) => {
+    app.post("/users", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
       res.json(result);
     });
 
-    app.put("/updateUsers", async (req, res) => {
+    app.put("/users", async (req, res) => {
       const user = req.body;
       const filter = { email: user.email };
       const options = { upsert: true };
