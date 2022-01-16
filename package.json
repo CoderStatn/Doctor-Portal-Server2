@@ -17,6 +17,7 @@
     "express": "^4.17.2",
     "firebase-admin": "^10.0.1",
     "mongodb": "^4.3.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "stripe": "^8.197.0"
   }
 }

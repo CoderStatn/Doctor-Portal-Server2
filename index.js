@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const { use } = require("express/lib/application");
 require("dotenv").config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -22,13 +22,20 @@ async function run() {
     const appointmentsCollection = database.collection("appointments");
     const usersCollection = database.collection("users");
 
-    app.get("/appointments", async (req, res) => {
+    app.get("/getAppointments", async (req, res) => {
       const email = req.query.email;
       const date = new Date(req.query.date).toLocaleDateString();
       const query = { email: email, date: date };
       const cursor = appointmentsCollection.find(query);
       const appointments = await cursor.toArray();
       res.json(appointments);
+    });
+
+    app.get("/appointments/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await appointmentsCollection.findOne(query);
+      res.json(result);
     });
 
     app.post("/appointments", async (req, res) => {
@@ -48,13 +55,13 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
-    app.post("/users", async (req, res) => {
+    app.post("/addUsers", async (req, res) => {
       const user = req.body;
       const result = await usersCollection.insertOne(user);
       res.json(result);
     });
 
-    app.put("/users", async (req, res) => {
+    app.put("/updateUsers", async (req, res) => {
       const user = req.body;
       const filter = { email: user.email };
       const options = { upsert: true };
