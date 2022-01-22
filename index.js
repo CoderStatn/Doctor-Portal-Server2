@@ -4,7 +4,7 @@ const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
 const { use } = require("express/lib/application");
 require("dotenv").config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 const stripe = require("stripe")(process.env.STRIPE_SECRET);
 const fileUpload = require("express-fileupload");
 
